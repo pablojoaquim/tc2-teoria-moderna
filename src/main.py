@@ -15,7 +15,9 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 # from scipy.signal import butter, lfilter, freqz
-from scipy import signal as filters
+# from scipy import signal as filters
+
+from analog import filters
     
 # ******************************************************************************
 # * Objects Declarations
@@ -46,36 +48,36 @@ def format_plots(ax, filter_name):
         ax[1].grid(b=True, which='both', axis='both')
         ax[1].legend()
         
-# ******************************************************************************
-# * @brief Obtain a butterworth coefficients according to the parameters definition
-# ******************************************************************************
-def butter_bandpass(lowcut, highcut, fs, order=5, analog = False):
-    return filters.butter(order, [lowcut, highcut], fs=fs, btype='band', analog=analog)
+# # ******************************************************************************
+# # * @brief Obtain a butterworth coefficients according to the parameters definition
+# # ******************************************************************************
+# def butter_bandpass(lowcut, highcut, fs, order=5, analog = False):
+#     return filters.butter(order, [lowcut, highcut], fs=fs, btype='band', analog=analog)
 
-# ******************************************************************************
-# * @brief Obtain a butterworth coefficients according to the parameters definition
-# ******************************************************************************
-def butter_lowpass(cutoff, fs=0, order=5, analog = False):
-    if (analog):
-        return filters.butter(order, cutoff, btype='low', analog=True)
-    else:
-        return filters.butter(order, cutoff, fs=fs, btype='low', analog=False)
+# # ******************************************************************************
+# # * @brief Obtain a butterworth coefficients according to the parameters definition
+# # ******************************************************************************
+# def butter_lowpass(fc, fs=0, order=5, analog = False):
+#     if (analog):
+#         return filters.butter(order, fc, btype='low', analog=True)
+#     else:
+#         return filters.butter(order, fc, fs=fs, btype='low', analog=False)
 
-# ******************************************************************************
-# * @brief Obtain a lowpass filter and apply it to the input signal defined in data
-# ******************************************************************************
-def butter_lowpass_filter(data, cutoff, fs, order=5):
-    b, a = butter_lowpass(cutoff, fs, order)
-    y = filters.lfilter(b, a, data)
-    return y
+# # ******************************************************************************
+# # * @brief Obtain a lowpass filter and apply it to the input signal defined in data
+# # ******************************************************************************
+# def butter_lowpass_filter(data, cutoff, fs, order=5):
+#     b, a = butter_lowpass(cutoff, fs, order)
+#     y = filters.lfilter(b, a, data)
+#     return y
 
-# ******************************************************************************
-# * @brief Obtain a bandpass filter and apply it to the input signal defined in data
-# ******************************************************************************
-def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
-    b, a = butter_bandpass(lowcut, highcut, fs, order)
-    y = filters.lfilter(b, a, data)
-    return y
+# # ******************************************************************************
+# # * @brief Obtain a bandpass filter and apply it to the input signal defined in data
+# # ******************************************************************************
+# def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
+#     b, a = butter_bandpass(lowcut, highcut, fs, order)
+#     y = filters.lfilter(b, a, data)
+#     return y
                         
 # ******************************************************************************
 # * @brief The handler for the termination signal handler
@@ -95,14 +97,15 @@ if __name__ == '__main__':
     try:
         print("Initializing...", flush=True)
         
-        fig, ax = plt.subplots(2, 1, figsize=(18,12))
+        fig, ax = plt.subplots(2, 1)
 
         fc = 1000
         orders = [1,2,3,4]
         for order in orders:
-            num,den = butter_lowpass(cutoff=fc, order=order, analog = True)
+            num, den = filters.Butterworth.butter_lowpass(fc=fc, order=order)
+            # num,den = butter_lowpass(fc=fc, order=order, analog = True)
             # b, a = signal.butter(2*(order+1), fc, analog=True)
-            w, h = filters.freqs(num, den)
+            w, h = sp.signal.freqs(num, den)
             ax[0].semilogx(w, 20 * np.log10(abs(h)), label="order = %d" % order)
             ax[0].axvline(fc, color='green', linestyle='--')
             ax[0].axhline(-3, color='green', linestyle='--')
