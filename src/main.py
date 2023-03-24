@@ -11,14 +11,10 @@
 # * import modules
 # ******************************************************************************
 import signal
-import numpy as np
-import scipy as sp
-import matplotlib.pyplot as plt
-# from scipy.signal import butter, lfilter, freqz
-# from scipy import signal as filters
 
 from analog import filters
-    
+from analog import bode
+
 # ******************************************************************************
 # * Objects Declarations
 # ******************************************************************************
@@ -31,54 +27,7 @@ running = True
 # ******************************************************************************
 # * Function Definitions
 # ******************************************************************************
-# ******************************************************************************
-# * @brief Format Bode plots
-# ******************************************************************************
-def format_plots(ax, filter_name):
-    for column in range(2):
-        ax[0].set_title(f'{filter_name} filter')
-        ax[0].set_xlabel('Frequency [Hz]')
-        ax[0].set_ylabel('|H(jw)| [dB]')
-        ax[0].margins(0, 0.1)
-        ax[0].grid(b=True, which='both', axis='both')
-        ax[0].legend()
-        ax[1].set_xlabel('Frequency [Hz]')
-        ax[1].set_ylabel('Phase [degrees]')
-        ax[1].margins(0, 0.1)
-        ax[1].grid(b=True, which='both', axis='both')
-        ax[1].legend()
-        
-# # ******************************************************************************
-# # * @brief Obtain a butterworth coefficients according to the parameters definition
-# # ******************************************************************************
-# def butter_bandpass(lowcut, highcut, fs, order=5, analog = False):
-#     return filters.butter(order, [lowcut, highcut], fs=fs, btype='band', analog=analog)
-
-# # ******************************************************************************
-# # * @brief Obtain a butterworth coefficients according to the parameters definition
-# # ******************************************************************************
-# def butter_lowpass(fc, fs=0, order=5, analog = False):
-#     if (analog):
-#         return filters.butter(order, fc, btype='low', analog=True)
-#     else:
-#         return filters.butter(order, fc, fs=fs, btype='low', analog=False)
-
-# # ******************************************************************************
-# # * @brief Obtain a lowpass filter and apply it to the input signal defined in data
-# # ******************************************************************************
-# def butter_lowpass_filter(data, cutoff, fs, order=5):
-#     b, a = butter_lowpass(cutoff, fs, order)
-#     y = filters.lfilter(b, a, data)
-#     return y
-
-# # ******************************************************************************
-# # * @brief Obtain a bandpass filter and apply it to the input signal defined in data
-# # ******************************************************************************
-# def butter_bandpass_filter(data, lowcut, highcut, fs, order=5):
-#     b, a = butter_bandpass(lowcut, highcut, fs, order)
-#     y = filters.lfilter(b, a, data)
-#     return y
-                        
+                      
 # ******************************************************************************
 # * @brief The handler for the termination signal handler
 # ******************************************************************************
@@ -97,22 +46,14 @@ if __name__ == '__main__':
     try:
         print("Initializing...", flush=True)
         
-        fig, ax = plt.subplots(2, 1)
-
+        H = []
         fc = 1000
         orders = [1,2,3,4]
+        plotter = bode.FreqResponse()
         for order in orders:
             num, den = filters.Butterworth.butter_lowpass(fc=fc, order=order)
-            # num,den = butter_lowpass(fc=fc, order=order, analog = True)
-            # b, a = signal.butter(2*(order+1), fc, analog=True)
-            w, h = sp.signal.freqs(num, den)
-            ax[0].semilogx(w, 20 * np.log10(abs(h)), label="order = %d" % order)
-            ax[0].axvline(fc, color='green', linestyle='--')
-            ax[0].axhline(-3, color='green', linestyle='--')
-            ax[1].semilogx(w, np.unwrap(np.angle(h))*180/np.pi, label="order = %d" % order)
-            ax[1].axvline(fc, color='green', linestyle='--')
-            
-        format_plots(ax,"Butterworth")
+            H.append([num, den, order])
+        plotter.plot(H, [fc,-3], "Butterworth")
 
         # b1, a1 = filters.butter(1, 1, 'high', analog=True)
         # print("analog filter: ", [b1, a1])
@@ -182,7 +123,7 @@ if __name__ == '__main__':
         # plt.axis('tight')
         # plt.legend(loc='upper left')
         
-        plt.show()
+        # plt.show()
         
     except RuntimeError:
         print("Finishing...", flush=True)
