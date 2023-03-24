@@ -1,0 +1,21 @@
+version: "3.3"
+services:
+  # Add the reference to our containers
+  web:
+    build: .
+  
+    # The exposed ports in the form "HOST_PORT:CONTAINER_PORT"
+    # ports:
+      # - "8000:5000"
+  
+    # The volume on the host to share with the container in the form "HOST_DIRECTORY:CONTAINER_DIRECTORY"
+    # volumes:
+    #   - .:/code
+  
+    # Environment variables to be declared into the container
+    # environment:
+      # FLASK_ENV: development
+  
+  # Other images we want to run along with our container
+  # redis:
+  #   image: "redis:alpine"            
