@@ -12,8 +12,10 @@
 # ******************************************************************************
 import signal
 
+import scipy as sp
 from analog import filters
 from analog import bode
+import control
 
 # ******************************************************************************
 # * Objects Declarations
@@ -58,24 +60,28 @@ if __name__ == '__main__':
         H = []
         for order in orders:
             num, den = filters.Butterworth.butter_lowpass(wc=wc, order=order)
+            print("H(s)=", control.tf(num, den))
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - lowpass")
 
         H = []
         for order in orders:
             num, den = filters.Butterworth.butter_highpass(wc=wc, order=order)
+            print("H(s)=", control.tf(num, den))
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - highpass")
 
         H = []
         for order in orders:
             num, den = filters.Butterworth.butter_bandpass(wci=wci, wcs=wcs, order=order)
+            print("H(s)=", control.tf(num, den))
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - bandpass")
 
         H = []
         for order in orders:
             num, den = filters.Butterworth.butter_bandstop(wci=wci, wcs=wcs, order=order)
+            print("H(s)=", control.tf(num, den))
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - bandstop")
 
