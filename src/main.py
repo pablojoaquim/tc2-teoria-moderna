@@ -12,12 +12,10 @@
 # ******************************************************************************
 import signal
 
-import scipy as sp
+import control
+import numpy as np
 from analog import filters
 from analog import bode
-
-import numpy as np
-import control
 
 # ******************************************************************************
 # * Objects Declarations
@@ -59,11 +57,14 @@ if __name__ == '__main__':
         orders = [1,2,3,4]
     
         # Filter definition by poles and zeroes
+        H = []
         num = np.array([1,10])
         den = np.polymul(np.array([1,1]), np.array([1,100]))
-        h = control.tf(num,den)
-        plotter.pzmap(h)
-        plotter.bode(h)
+        H.append([num, den, "func1"])
+        num = np.array([1,20])
+        den = np.polymul(np.array([1,1]), np.array([1,200]))
+        H.append([num, den, "func2"])
+        plotter.pzplot(H, 200, title="Pole-Zero")
         
         # Butterworth - lowpass
         H = []
@@ -73,6 +74,7 @@ if __name__ == '__main__':
             print("H(s)=", h)
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - lowpass")
+        plotter.pzplot(H, wc, title="Butterworth - lowpass")
 
         # Butterworth - highpass
         H = []
@@ -82,6 +84,7 @@ if __name__ == '__main__':
             print("H(s)=", h)
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - highpass")
+        plotter.pzplot(H, wc, title="Butterworth - highpass")
 
         # Butterworth - bandpass
         H = []
@@ -91,6 +94,7 @@ if __name__ == '__main__':
             print("H(s)=", h)
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - bandpass")
+        plotter.pzplot(H, wc, title="Butterworth - bandpass")        
 
         # Butterworth - bandstop
         H = []
@@ -100,6 +104,7 @@ if __name__ == '__main__':
             print("H(s)=", h)
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - bandstop")
+        plotter.pzplot(H, wc, title="Butterworth - bandstop")        
         
         # b1, a1 = filters.butter(1, 1, 'high', analog=True)
         # print("analog filter: ", [b1, a1])

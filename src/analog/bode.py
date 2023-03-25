@@ -13,6 +13,7 @@
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
+from matplotlib import patches
 # import control.matlab as ml
 import control
 
@@ -54,7 +55,7 @@ class FreqResponse():
         
     # ******************************************************************************
     # * @brief Plot the frequecy response of each transfer.
-    # * H is a list of as many transfer functions you want to plot in the form [num, den, order]
+    # * H is a list of as many transfer functions you want to plot in the form [num, den, label]
     # ******************************************************************************
     def plot(self, H, marker=[0,0], title = ""):
       pi = 3.14
@@ -90,11 +91,46 @@ class FreqResponse():
       plt.show()
 
     # ******************************************************************************
+    # * @brief Plot the zero-pole diagram
+    # * H is a list of as many transfer functions you want to plot in the form [num, den, label]
+    # ******************************************************************************
+    def pzplot(self, H, wo=0, title = ""):
+      fig, ax = plt.subplots(1, 1)
+           
+      for h in H:
+        num = h[0]
+        den = h[1]
+        label = ""
+        if (len(h)>=2):
+          label = h[2]
+        (zeros,poles,gain) = sp.signal.tf2zpk(num, den)
+        
+        # Plot the poles and set marker properties
+        p = plt.plot(poles.real, poles.imag, 'x', markersize=9, alpha=1, label=label)
+    
+        # Plot the zeros and set marker properties
+        z = plt.plot(zeros.real, zeros.imag,  'o', markersize=9, 
+             color='none', alpha=1,
+             markeredgecolor=p[0].get_color(), # same color as poles
+             label=label)
+        
+      if (wo != 0):
+        circle = plt.Circle((0, 0), radius=wo, fill = False, color='black', ls='solid', alpha=0.3)
+        ax.add_patch(circle)
+      
+      plt.axis('square')
+      plt.xlabel('Real')
+      plt.ylabel('Imag')
+      plt.title(f'{title}')
+      plt.grid(b=True, which='both', axis='both')
+      plt.legend()
+      plt.show()
+  
+    # ******************************************************************************
     # * @brief Plot the bode diagram of each transfer.
     # ******************************************************************************
     def bode(self, H):
       control.bode_plot(H, grid=True)
-      # Finally show the plots
       plt.show()      
       
     # ******************************************************************************
@@ -102,6 +138,7 @@ class FreqResponse():
     # ******************************************************************************
     def pzmap(self, H):
       control.pzmap(H)
+      plt.show()
 
 # ******************************************************************************
 # * Object and variables Definitions
