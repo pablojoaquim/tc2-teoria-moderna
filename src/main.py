@@ -12,10 +12,10 @@
 # ******************************************************************************
 import signal
 
+import control
 import numpy as np
 from analog import filters
 from analog import bode
-from scipy.signal import lsim
 import matplotlib.pyplot as plt
 
 # ******************************************************************************
@@ -56,55 +56,57 @@ if __name__ == '__main__':
         wcs = 2*np.pi*1500
         orders = [1,2,3,4]
     
-        # # Filter definition by poles and zeroes
-        # H = []
-        # num = np.array([1,10])
-        # den = np.polymul(np.array([1,1]), np.array([1,100]))
-        # H.append([num, den, "func1"])
-        # num = np.array([1,20])
-        # den = np.polymul(np.array([1,1]), np.array([1,200]))
-        # H.append([num, den, "func2"])
-        # plotter.pzplot(H, 200, title="Pole-Zero")
+        # Filter definition by poles and zeroes
+        H = []
+        num = np.array([1,10])
+        den = np.polymul(np.array([1,1]), np.array([1,100]))
+        H.append([num, den, "func1"])
+        num = np.array([1,20])
+        den = np.polymul(np.array([1,1]), np.array([1,200]))
+        H.append([num, den, "func2"])
+        plotter.pzplot(H, 200, title="Pole-Zero")
+        h = control.tf(num, den)
+        plotter.bode(h)
         
-        # # Butterworth - lowpass
-        # H = []
-        # for order in orders:
-        #     num, den = filters.Butterworth.butter_lowpass(wc=wc, order=order)
-        #     h = control.tf(num, den)
-        #     print("H(s)=", h)
-        #     H.append([num, den, "order = %d" % order])
-        # plotter.plot(H, [fo,-3], "Butterworth - lowpass")
-        # plotter.pzplot(H, wc, title="Butterworth - lowpass")
+        # Butterworth - lowpass
+        H = []
+        for order in orders:
+            num, den = filters.Butterworth.butter_lowpass(wc=wc, order=order)
+            h = control.tf(num, den)
+            print("H(s)=", h)
+            H.append([num, den, "order = %d" % order])
+        plotter.plot(H, [fo,-3], "Butterworth - lowpass")
+        plotter.pzplot(H, wc, title="Butterworth - lowpass")
 
-        # # Butterworth - highpass
-        # H = []
-        # for order in orders:
-        #     num, den = filters.Butterworth.butter_highpass(wc=wc, order=order)
-        #     h = control.tf(num, den)
-        #     print("H(s)=", h)
-        #     H.append([num, den, "order = %d" % order])
-        # plotter.plot(H, [fo,-3], "Butterworth - highpass")
-        # plotter.pzplot(H, wc, title="Butterworth - highpass")
+        # Butterworth - highpass
+        H = []
+        for order in orders:
+            num, den = filters.Butterworth.butter_highpass(wc=wc, order=order)
+            h = control.tf(num, den)
+            print("H(s)=", h)
+            H.append([num, den, "order = %d" % order])
+        plotter.plot(H, [fo,-3], "Butterworth - highpass")
+        plotter.pzplot(H, wc, title="Butterworth - highpass")
 
-        # # Butterworth - bandpass
-        # H = []
-        # for order in orders:
-        #     num, den = filters.Butterworth.butter_bandpass(wci=wci, wcs=wcs, order=order)
-        #     h = control.tf(num, den)
-        #     print("H(s)=", h)
-        #     H.append([num, den, "order = %d" % order])
-        # plotter.plot(H, [fo,-3], "Butterworth - bandpass")
-        # plotter.pzplot(H, wc, title="Butterworth - bandpass")        
+        # Butterworth - bandpass
+        H = []
+        for order in orders:
+            num, den = filters.Butterworth.butter_bandpass(wci=wci, wcs=wcs, order=order)
+            h = control.tf(num, den)
+            print("H(s)=", h)
+            H.append([num, den, "order = %d" % order])
+        plotter.plot(H, [fo,-3], "Butterworth - bandpass")
+        plotter.pzplot(H, wc, title="Butterworth - bandpass")        
 
-        # # Butterworth - bandstop
-        # H = []
-        # for order in orders:
-        #     num, den = filters.Butterworth.butter_bandstop(wci=wci, wcs=wcs, order=order)
-        #     h = control.tf(num, den)
-        #     print("H(s)=", h)
-        #     H.append([num, den, "order = %d" % order])
-        # plotter.plot(H, [fo,-3], "Butterworth - bandstop")
-        # plotter.pzplot(H, wc, title="Butterworth - bandstop")        
+        # Butterworth - bandstop
+        H = []
+        for order in orders:
+            num, den = filters.Butterworth.butter_bandstop(wci=wci, wcs=wcs, order=order)
+            h = control.tf(num, den)
+            print("H(s)=", h)
+            H.append([num, den, "order = %d" % order])
+        plotter.plot(H, [fo,-3], "Butterworth - bandstop")
+        plotter.pzplot(H, wc, title="Butterworth - bandstop")        
         
         # Test a filter time response
         # The input signal is the sum of three sinusoidal curves, with frequencies 4 Hz, 40 Hz, and 80 Hz. 

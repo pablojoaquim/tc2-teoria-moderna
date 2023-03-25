@@ -13,7 +13,6 @@
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
-from matplotlib import patches
 # import control.matlab as ml
 import control
 
