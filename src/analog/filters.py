@@ -34,26 +34,26 @@ class Butterworth():
     # ******************************************************************************
     # * @brief Obtain a butterworth coefficients according to the parameters definition
     # ******************************************************************************
-    def butter_lowpass(fc, order=5):
-        return filters.butter(order, fc, btype='lowpass', analog=True)
+    def butter_lowpass(wc, order=5):
+        return filters.butter(order, wc, btype='lowpass', analog=True)
 
     # ******************************************************************************
     # * @brief Obtain a butterworth coefficients according to the parameters definition
     # ******************************************************************************
-    def butter_highpass(fc, order=5):
-        return filters.butter(order, fc, btype='highpass', analog=True)
+    def butter_highpass(wc, order=5):
+        return filters.butter(order, wc, btype='highpass', analog=True)
 
     # ******************************************************************************
     # * @brief Obtain a butterworth coefficients according to the parameters definition
     # ******************************************************************************
-    def butter_bandpass(fci, fcs, order=5):
-        return filters.butter(order, [fci, fcs], btype='bandpass', analog=True)
+    def butter_bandpass(wci, wcs, order=5):
+        return filters.butter(order, [wci, wcs], btype='bandpass', analog=True)
 
     # ******************************************************************************
     # * @brief Obtain a butterworth coefficients according to the parameters definition
     # ******************************************************************************
-    def butter_bandstop(fci, fcs, order=5):
-        return filters.butter(order, [fci, fcs], btype='bandstop', analog=True)
+    def butter_bandstop(wci, wcs, order=5):
+        return filters.butter(order, [wci, wcs], btype='bandstop', analog=True)
 
 
 # ******************************************************************************

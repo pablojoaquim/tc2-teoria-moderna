@@ -46,15 +46,40 @@ if __name__ == '__main__':
     try:
         print("Initializing...", flush=True)
         
-        H = []
-        fc = 1000
+        pi = 3.14
+        fo = 1000
+        wc = 2*pi*fo
+        wci = 2*pi*500
+        wcs = 2*pi*1500
+        
         orders = [1,2,3,4]
-        plotter = bode.FreqResponse()
+        plotter = bode.FreqResponse()        
+        
+        H = []
         for order in orders:
-            num, den = filters.Butterworth.butter_lowpass(fc=fc, order=order)
-            H.append([num, den, order])
-        plotter.plot(H, [fc,-3], "Butterworth")
+            num, den = filters.Butterworth.butter_lowpass(wc=wc, order=order)
+            H.append([num, den, "order = %d" % order])
+        plotter.plot(H, [fo,-3], "Butterworth - lowpass")
 
+        H = []
+        for order in orders:
+            num, den = filters.Butterworth.butter_highpass(wc=wc, order=order)
+            H.append([num, den, "order = %d" % order])
+        plotter.plot(H, [fo,-3], "Butterworth - highpass")
+
+        H = []
+        for order in orders:
+            num, den = filters.Butterworth.butter_bandpass(wci=wci, wcs=wcs, order=order)
+            H.append([num, den, "order = %d" % order])
+        plotter.plot(H, [fo,-3], "Butterworth - bandpass")
+
+        H = []
+        for order in orders:
+            num, den = filters.Butterworth.butter_bandstop(wci=wci, wcs=wcs, order=order)
+            H.append([num, den, "order = %d" % order])
+        plotter.plot(H, [fo,-3], "Butterworth - bandstop")
+
+        
         # b1, a1 = filters.butter(1, 1, 'high', analog=True)
         # print("analog filter: ", [b1, a1])
 
