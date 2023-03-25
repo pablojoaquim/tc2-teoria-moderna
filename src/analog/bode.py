@@ -58,7 +58,6 @@ class FreqResponse():
     # * H is a list of as many transfer functions you want to plot in the form [num, den, label]
     # ******************************************************************************
     def plot(self, H, marker=[0,0], title = ""):
-      pi = 3.14
       fig, ax = plt.subplots(2, 1)
       
       for h in H:
@@ -70,7 +69,7 @@ class FreqResponse():
         w, h = sp.signal.freqs(num, den)
 
         # Plot the module of the transfer
-        ax[0].semilogx(w/(2*pi), 20 * np.log10(abs(h)), label=label)
+        ax[0].semilogx(w/(2*np.pi), 20 * np.log10(abs(h)), label=label)
         if (marker[0] != 0):
           fc = marker[0]
           ax[0].axvline(fc, color='green', linestyle='--')
@@ -79,7 +78,7 @@ class FreqResponse():
           ax[0].axhline(mod, color='green', linestyle='--')
 
         # Plot the phase of the transfer
-        ax[1].semilogx(w/(2*pi), np.unwrap(np.angle(h))*180/np.pi, label=label)
+        ax[1].semilogx(w/(2*np.pi), np.unwrap(np.angle(h))*180/np.pi, label=label)
         if (marker[0] != 0):
           fc = marker[0]
           ax[1].axvline(fc, color='green', linestyle='--')
