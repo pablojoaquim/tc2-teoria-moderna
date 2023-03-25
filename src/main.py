@@ -15,6 +15,8 @@ import signal
 import scipy as sp
 from analog import filters
 from analog import bode
+
+import numpy as np
 import control
 
 # ******************************************************************************
@@ -47,44 +49,57 @@ if __name__ == '__main__':
 
     try:
         print("Initializing...", flush=True)
-        
+        plotter = bode.FreqResponse()        
+            
         pi = 3.14
         fo = 1000
         wc = 2*pi*fo
         wci = 2*pi*500
         wcs = 2*pi*1500
-        
         orders = [1,2,3,4]
-        plotter = bode.FreqResponse()        
+    
+        # Filter definition by poles and zeroes
+        num = np.array([1,10])
+        den = np.polymul(np.array([1,1]), np.array([1,100]))
+        h = control.tf(num,den)
+        plotter.pzmap(h)
+        plotter.bode(h)
         
+        # Butterworth - lowpass
         H = []
         for order in orders:
             num, den = filters.Butterworth.butter_lowpass(wc=wc, order=order)
-            print("H(s)=", control.tf(num, den))
+            h = control.tf(num, den)
+            print("H(s)=", h)
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - lowpass")
 
+        # Butterworth - highpass
         H = []
         for order in orders:
             num, den = filters.Butterworth.butter_highpass(wc=wc, order=order)
-            print("H(s)=", control.tf(num, den))
+            h = control.tf(num, den)
+            print("H(s)=", h)
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - highpass")
 
+        # Butterworth - bandpass
         H = []
         for order in orders:
             num, den = filters.Butterworth.butter_bandpass(wci=wci, wcs=wcs, order=order)
-            print("H(s)=", control.tf(num, den))
+            h = control.tf(num, den)
+            print("H(s)=", h)
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - bandpass")
 
+        # Butterworth - bandstop
         H = []
         for order in orders:
             num, den = filters.Butterworth.butter_bandstop(wci=wci, wcs=wcs, order=order)
-            print("H(s)=", control.tf(num, den))
+            h = control.tf(num, den)
+            print("H(s)=", h)
             H.append([num, den, "order = %d" % order])
         plotter.plot(H, [fo,-3], "Butterworth - bandstop")
-
         
         # b1, a1 = filters.butter(1, 1, 'high', analog=True)
         # print("analog filter: ", [b1, a1])

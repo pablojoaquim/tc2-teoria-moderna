@@ -13,6 +13,8 @@
 import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
+# import control.matlab as ml
+import control
 
 # ******************************************************************************
 # * Objects Declarations
@@ -86,6 +88,20 @@ class FreqResponse():
       
       # Finally show the plots
       plt.show()
+
+    # ******************************************************************************
+    # * @brief Plot the bode diagram of each transfer.
+    # ******************************************************************************
+    def bode(self, H):
+      control.bode_plot(H, grid=True)
+      # Finally show the plots
+      plt.show()      
+      
+    # ******************************************************************************
+    # * @brief Plot the pole-zero diagram of the system H
+    # ******************************************************************************
+    def pzmap(self, H):
+      control.pzmap(H)
 
 # ******************************************************************************
 # * Object and variables Definitions
