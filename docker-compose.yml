@@ -1,7 +1,7 @@
 version: "3.3"
 services:
   # Add the reference to our containers
-  web:
+  app:
     build: .
   
     # The exposed ports in the form "HOST_PORT:CONTAINER_PORT"
