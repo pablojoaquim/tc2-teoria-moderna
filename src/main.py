@@ -54,7 +54,7 @@ if __name__ == '__main__':
         wc = 2*np.pi*fo
         wci = 2*np.pi*500
         wcs = 2*np.pi*1500
-        orders = [1,2,3,4]
+        orders = [1,2,3,4]    
     
         # Filter definition by poles and zeroes
         H = []
@@ -121,6 +121,22 @@ if __name__ == '__main__':
         plt.grid(alpha=0.3)
         plt.xlabel('t')
         plt.show()
+        
+        # Get the order of a Butterworth filter
+        wp=1000
+        ws=2000
+        rp=1
+        rs=15
+        (N,wb)=filters.Butterworth.butter_lowpass_order(wp, ws, rp, rs)
+        print(N,wb)
+        
+        H = []
+        num, den = filters.Butterworth.butter_lowpass(wc=wb, order=N)
+        h = control.tf(num, den)
+        print("H(s)=", h)
+        H.append([num, den, "Butterworth"])
+        plotter.plot(H, [wp/(2*np.pi),rp*-1], "Butterworth")
+        plotter.pzplot(H, wb, title="Butterworth")
         
     except RuntimeError:
         print("Finishing...", flush=True)

@@ -36,6 +36,13 @@ class Butterworth():
     # ******************************************************************************
     # * @brief Obtain a butterworth coefficients according to the parameters definition
     # ******************************************************************************
+    def butter_lowpass_order(wp, ws, rp, rs):
+        N, Wn = filters.buttord(wp, ws, rp, rs, True)
+        return (N,Wn)
+    
+    # ******************************************************************************
+    # * @brief Obtain a butterworth coefficients according to the parameters definition
+    # ******************************************************************************
     def butter_lowpass(wc, order=5):
         return filters.butter(order, wc, btype='lowpass', analog=True)
 
