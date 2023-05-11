@@ -45,17 +45,17 @@ class FreqResponse():
           ax[0].set_ylabel('|H(jw)| [dB]')
           ax[0].margins(0, 0.1)
           ax[0].grid(b=True, which='both', axis='both')
-          ax[0].legend([""])
+          ax[0].legend()
           ax[1].set_xlabel('Frequency [Hz]')
           ax[1].set_ylabel('Phase [degrees]')
           ax[1].margins(0, 0.1)
           ax[1].grid(b=True, which='both', axis='both')
-          ax[1].legend([""])
+          ax[1].legend()
           ax[2].set_xlabel('Frequency [Hz]')
           ax[2].set_ylabel('GroupDelay [seconds]')
           ax[2].margins(0, 0.1)
           ax[2].grid(b=True, which='both', axis='both')
-          ax[2].legend([""])
+          ax[2].legend()
         
     # ******************************************************************************
     # * @brief Plot the frequecy response of each transfer.
