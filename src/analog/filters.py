@@ -64,6 +64,53 @@ class Butterworth():
     def butter_bandstop(wci, wcs, order=5):
         return filters.butter(order, [wci, wcs], btype='bandstop', analog=True)
 
+class Chebyshev():
+    # ******************************************************************************
+    # * @brief The __init__() function is called automatically every time the class
+    # * is being used to create a new object.
+    # ******************************************************************************
+    def __init__(self):
+        # The self parameter is a reference to the current instance of the class,
+        # and is used to access variables that belong to the class.
+        pass
+
+    # ******************************************************************************
+    # * @brief Returns a string as a representation of the object.
+    # ******************************************************************************
+    def __repr__(self):
+        return '<Metadata(name={self.id!r})>'.format(self=self)
+
+    # ******************************************************************************
+    # * @brief Obtain a butterworth coefficients according to the parameters definition
+    # ******************************************************************************
+    def cheby_lowpass_order(wp, ws, rp, rs):
+        N, Wn = filters.cheb1ord(wp, ws, rp, rs, True)
+        return (N)
+    
+    # ******************************************************************************
+    # * @brief Obtain a butterworth coefficients according to the parameters definition
+    # ******************************************************************************
+    def cheby_lowpass(wc, rp, order=5):
+        return filters.cheby1(order, rp, wc, btype='lowpass', analog=True)
+
+    # ******************************************************************************
+    # * @brief Obtain a butterworth coefficients according to the parameters definition
+    # ******************************************************************************
+    def cheby_highpass(wc, rp, order=5):
+        return filters.cheby1(order, rp, wc, btype='highpass', analog=True)
+
+    # ******************************************************************************
+    # * @brief Obtain a butterworth coefficients according to the parameters definition
+    # ******************************************************************************
+    def cheby_bandpass(wci, wcs, rp, order=5):
+        return filters.cheby1(order, rp, [wci, wcs], btype='bandpass', analog=True)
+
+    # ******************************************************************************
+    # * @brief Obtain a butterworth coefficients according to the parameters definition
+    # ******************************************************************************
+    def cheby_bandstop(wci, wcs, rp, order=5):
+        return filters.cheby1(order, rp, [wci, wcs], btype='bandstop', analog=True)
+
 class SignalGenerator():
     # ******************************************************************************
     # * @brief The __init__() function is called automatically every time the class
