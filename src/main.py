@@ -56,17 +56,16 @@ if __name__ == '__main__':
         wcs = 2*np.pi*1500
         orders = [1,2,3,4]    
     
-        # Filter definition by poles and zeroes
-        H = []
-        num = np.array([1,10])
-        den = np.polymul(np.array([1,1]), np.array([1,100]))
-        H.append([num, den, "func1"])
-        num = np.array([1,20])
-        den = np.polymul(np.array([1,1]), np.array([1,200]))
-        H.append([num, den, "func2"])
-        plotter.pzplot(H, 200, title="Pole-Zero")
-        h = control.tf(num, den)
-        plotter.bode(h)
+        # # Filter definition by poles and zeroes
+        # H = []
+        # num = np.array([1])
+        # den = np.polymul(np.array([1,1]), np.array([1,10]))
+        # H.append([num, den, "func1"])
+        # num = np.array([1])
+        # den = np.polymul(np.array([1,1]), np.array([1,1]))
+        # H.append([num, den, "func2"])
+        # plotter.plot(H, [1,-3], "First order systems")
+        # plotter.pzplot(H, 1, title="Pole-Zero")
         
         # Butterworth - lowpass
         H = []

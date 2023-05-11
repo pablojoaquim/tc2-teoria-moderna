@@ -39,25 +39,30 @@ class FreqResponse():
     # * @brief Format the Bode plots
     # ******************************************************************************
     def __format_plots(self, ax, title):
-      for column in range(2):
+      for column in range(3):
           ax[0].set_title(f'{title}')
           ax[0].set_xlabel('Frequency [Hz]')
           ax[0].set_ylabel('|H(jw)| [dB]')
           ax[0].margins(0, 0.1)
           ax[0].grid(b=True, which='both', axis='both')
-          ax[0].legend()
+          ax[0].legend([""])
           ax[1].set_xlabel('Frequency [Hz]')
           ax[1].set_ylabel('Phase [degrees]')
           ax[1].margins(0, 0.1)
           ax[1].grid(b=True, which='both', axis='both')
-          ax[1].legend()
+          ax[1].legend([""])
+          ax[2].set_xlabel('Frequency [Hz]')
+          ax[2].set_ylabel('GroupDelay [seconds]')
+          ax[2].margins(0, 0.1)
+          ax[2].grid(b=True, which='both', axis='both')
+          ax[2].legend([""])
         
     # ******************************************************************************
     # * @brief Plot the frequecy response of each transfer.
     # * H is a list of as many transfer functions you want to plot in the form [num, den, label]
     # ******************************************************************************
     def plot(self, H, marker=[0,0], title = ""):
-      fig, ax = plt.subplots(2, 1)
+      fig, ax = plt.subplots(3, 1)
       
       for h in H:
         num = h[0]
@@ -65,10 +70,18 @@ class FreqResponse():
         label = ""
         if (len(h)>=2):
           label = h[2]
-        w, h = sp.signal.freqs(num, den)
+
+        # Calc the mod and phase
+        w, mag, phase = sp.signal.bode((num,den))
+
+        # Calc the group delay
+        grpdelay = []
+        for i in (range(len(w)-1)):
+            grpdelay.append(-1*(phase[i]-phase[i+1])/(w[i]-w[i+1]))
+        grpdelay = grpdelay + grpdelay[-1:] # Repeat the last elements to have an array of the same dimmension as w[]
 
         # Plot the module of the transfer
-        ax[0].semilogx(w/(2*np.pi), 20 * np.log10(abs(h)), label=label)
+        ax[0].semilogx(w/(2*np.pi), mag, label=label)    # Bode magnitude plot
         if (marker[0] != 0):
           fc = marker[0]
           ax[0].axvline(fc, color='green', linestyle='--')
@@ -77,11 +90,17 @@ class FreqResponse():
           ax[0].axhline(mod, color='green', linestyle='--')
 
         # Plot the phase of the transfer
-        ax[1].semilogx(w/(2*np.pi), np.unwrap(np.angle(h))*180/np.pi, label=label)
+        ax[1].semilogx(w/(2*np.pi), phase)  # Bode phase plot
         if (marker[0] != 0):
           fc = marker[0]
           ax[1].axvline(fc, color='green', linestyle='--')
 
+        # Plot the group delay of the transfer
+        ax[2].semilogx(w/(2*np.pi), grpdelay)  # Bode phase plot
+        if (marker[0] != 0):
+          fc = marker[0]
+          ax[2].axvline(fc, color='green', linestyle='--')
+          
       # Format the Bode plots
       self.__format_plots(ax, title)
       
